@@ -33,7 +33,8 @@ def translate_russian_to_english(translation_request: dict):
     translation_request["target_lang"] = "en" 
     return translate_text(translation_request)
 
-if name == "main": import uvicorn
+if name == "main": 
+    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 
