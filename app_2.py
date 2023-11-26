@@ -7,7 +7,10 @@ class Item(BaseModel):
 
 app = FastAPI()
 classifier = pipeline("summarization", model="facebook/bart-large-cnn")
-
+@app.get("/")
+def root():
+    return {"message": "Hello"}
+    
 @app.post("/predict/")
 def predict(item: Item):
     return classifier(item.text )[0]
