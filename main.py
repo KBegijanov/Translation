@@ -1,3 +1,37 @@
+rom transformers import MarianMTModel, MarianTokenizer
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+# Загрузка модели и токенизатора для перевода текста
+model_name = "Helsinki-NLP/opus-mt-en-ru"  # Модель для перевода с английского на русский
+model = MarianMTModel.from_pretrained(model_name)
+tokenizer = MarianTokenizer.from_pretrained(model_name)
+
+
+# Модель запроса для FastAPI
+class TranslationRequest(BaseModel):
+    text: str  # Текст для перевода
+
+
+# Маршрут для перевода текста
+@app.post("/translate")
+def translate_text(request: TranslationRequest):
+    # Токенизация входного текста
+    inputs = tokenizer.encode(request.text, return_tensors="pt")
+
+    # Перевод текста с использованием модели
+    translated = model.generate(inputs, max_length=128, num_beams=4, early_stopping=True)
+    translated_text = tokenizer.decode(translated[0], skip_special_tokens=True)
+
+    return {"translation": translated_text}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+"""
 import streamlit as st
 from transformers import AutoModelForCausalLM, AutoTokenizer
 tokenizer = AutoTokenizer.from_pretrained("stabilityai/stablelm-base-alpha-3b-v2")
@@ -15,7 +49,7 @@ tokens = model.generate(
   top_p=0.95,
   do_sample=True,
 )
-print(tokenizer.decode(tokens[0], skip_special_tokens=True))
+print(tokenizer.decode(tokens[0], skip_special_tokens=True))"""
 
 """from fastapi import FastAPI
 from transformers import pipeline
