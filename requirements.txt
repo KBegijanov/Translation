@@ -2,3 +2,6 @@ fastapi[FastApi]
 uvicorn
 transformers[pipeleine]
 pydantic[BaseModel]
+transformers[sentencepiece]
+transformers[torch]
+sacremoses
