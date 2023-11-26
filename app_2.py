@@ -32,6 +32,6 @@ if st.button("Перевести"):
     tokenized_text = tokenizer(text_input, return_tensors="pt")
     #При нажатии на кнопку "перeвести" tokenizer принимает в качестве аргумента введенный текст
     translation = model.generate(**tokenized_text)
-    translated_text = pipe.batch_decode(translation, skip_special_tokens=True)
+    translated_text = tokenizer.batch_decode(translation, skip_special_tokens=True)
     st.write(translated_text[0])
     #Выводится перевод"""
