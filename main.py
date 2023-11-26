@@ -1,4 +1,4 @@
-rom fastapi import FastAPI 
+from fastapi import FastAPI 
 from transformers import AutoModelWithLMHead, AutoTokenizer 
 from pydantic import BaseModel
 
