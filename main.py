@@ -1,4 +1,4 @@
-rom transformers import MarianMTModel, MarianTokenizer
+from transformers import MarianMTModel, MarianTokenizer
 from fastapi import FastAPI
 from pydantic import BaseModel
 
