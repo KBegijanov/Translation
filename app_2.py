@@ -1,21 +1,24 @@
 import streamlit as st
 #импортируем библиотеку streamlit, чтобы запустить код в приложении
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-#импортируем модель
+from transformers import pipeline
 
-model_name = "Helsinki-NLP/opus-mt-en-ru"
-tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-ru")
-model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-en-ru")
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
-st.title("AI-переводчик с использованием Hugging Face и Streamlit")
+#model_name = "facebook/bart-large-cnn"
+
+#tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-cnn")
+#model = AutoModelForSeq2SeqLM.from_pretrained("facebook/bart-large-cnn")
+
+st.title("AI-content agregator")
 #Название, которые будет видно у нас в приложении
-text_input = st.text_area("Введите текст для перевода:", value="", height=200)
-#Место для ввода текста, для дальнейшего перевода
+text_input = st.text_area("Введите текст для конспектирования:", value="", height=200)
+#Место для ввода текста, для дальнейшего конспектирования
 
-if st.button("Перевести"):
-    tokenized_text = tokenizer(text_input, return_tensors="pt")
+if st.button("Конспектировать"):
+    tokenized_text = summarizer(text_input, return_tensors="pt")
     #При нажатии на кнопку "перeвести" tokenizer принимает в качестве аргумента введенный текст
-    translation = model.generate(**tokenized_text)
-    translated_text = tokenizer.batch_decode(translation, skip_special_tokens=True)
-    st.write(translated_text[0])
+    agregation = model.generate(**tokenized_text)
+    agregated_text = tokenizer.batch_decode(agregation, skip_special_tokens=True)
+    st.write(agregated_text[0])
     #Выводится перевод
+#rint(summarizer(ARTICLE, max_length=130, min_length=30, do_sample=False))
