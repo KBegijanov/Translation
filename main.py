@@ -1,4 +1,34 @@
-from fastapi import FastAPI 
+from fastapi import FastAPI
+from transformers import AutoModelWithLMHead, AutoTokenizer
+
+app = FastAPI()
+
+model_ru_en = AutoModelWithLMHead.from_pretrained("Helsinki-NLP/opus-mt-ru-en")
+tokenizer_ru_en = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-ru-en")
+model_en_ru = AutoModelWithLMHead.from_pretrained("Helsinki-NLP/opus-mt-en-ru")
+tokenizer_en_ru = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-ru")
+
+
+def translate_text(text, model, tokenizer):
+    input_ids = tokenizer.encode(text, return_tensors="pt")
+    output_ids = model.generate(input_ids, max_length=128, num_beams=4, early_stopping=True)
+    translated_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
+    return translated_text
+
+
+@app.post("/translate")
+def translate(input_text: str):
+    # Определяем язык текста
+    source_lang = "en" if all(ord(c) < 128 for c in input_text) else "ru"
+
+    if source_lang == "en":
+        translated_text = translate_text(input_text, model_en_ru, tokenizer_en_ru)
+    else:
+        translated_text = translate_text(input_text, model_ru_en, tokenizer_ru_en)
+
+    return {"input_text": input_text, "translated_text": translated_text}
+
+"""from fastapi import FastAPI 
 from transformers import MT5ForConditionalGeneration, T5Tokenizer
 app = FastAPI()
 
@@ -35,7 +65,7 @@ def translate_russian_to_english(translation_request: dict):
 
 if name == "main": 
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)"""
 
 
 
