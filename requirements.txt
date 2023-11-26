@@ -1,0 +1,4 @@
+fastapi[FastApi]
+uvicorn
+transformers[pipeleine]
+pydantic[BaseModel]
