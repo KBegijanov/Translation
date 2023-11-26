@@ -1,12 +1,14 @@
-"""from fastapi import FastAPI
+from fastapi import FastAPI
 from transformers import pipeline
 from pydantic import BaseModel
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 class Item(BaseModel):
     text: str
 
 app = FastAPI()
-pipe = pipeline("translation", model="Helsinki-NLP/opus-mt-en-ru")
+tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-ru")
+model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-en-ru")
 
 @app.get("/")
 def root():
@@ -14,9 +16,9 @@ def root():
     
 @app.post("/predict/")
 def predict(item: Item):
-    return pipe(item.text )[0]"""
+    return tokenizer(item.text )[0]"""
 
-import streamlit as st
+"""import streamlit as st
 #импортируем библиотеку streamlit, чтобы запустить код в приложении
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
