@@ -1,4 +1,23 @@
-from fastapi import FastAPI
+import streamlit as st
+from transformers import AutoModelForCausalLM, AutoTokenizer
+tokenizer = AutoTokenizer.from_pretrained("stabilityai/stablelm-base-alpha-3b-v2")
+model = AutoModelForCausalLM.from_pretrained(
+  "stabilityai/stablelm-base-alpha-3b-v2",
+  trust_remote_code=True,
+  torch_dtype="auto",
+)
+model.cuda()
+inputs = tokenizer("The weather is always wonderful", return_tensors="pt").to("cuda")
+tokens = model.generate(
+  **inputs,
+  max_new_tokens=64,
+  temperature=0.75,
+  top_p=0.95,
+  do_sample=True,
+)
+print(tokenizer.decode(tokens[0], skip_special_tokens=True))
+
+"""from fastapi import FastAPI
 from transformers import pipeline
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
@@ -17,7 +36,7 @@ def root():
 @app.post("/predict/")
 def predict(item: Item):
     return tokenizer(item.text )[0]
-
+"""
 """import streamlit as st
 #импортируем библиотеку streamlit, чтобы запустить код в приложении
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
