@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from transformers import MT5ForConditionalGeneration, T5Tokenizer
 app = FastAPI()
 
-Загрузка предобученной модели mT5 и токенизатора
+#Загрузка предобученной модели mT5 и токенизатора
 model = MT5ForConditionalGeneration.from_pretrained('google/mt5-small') 
 tokenizer = T5Tokenizer.from_pretrained('google/mt5-small')
 
