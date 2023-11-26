@@ -1,47 +1,41 @@
-from fastapi import FastAPI
+from fastapi import FastAPI 
 from transformers import MT5ForConditionalGeneration, T5Tokenizer
-
 app = FastAPI()
 
-# Загрузка предобученной модели mT5 и токенизатора
-model = MT5ForConditionalGeneration.from_pretrained('google/mt5-small')
+Загрузка предобученной модели mT5 и токенизатора
+model = MT5ForConditionalGeneration.from_pretrained('google/mt5-small') 
 tokenizer = T5Tokenizer.from_pretrained('google/mt5-small')
 
-
-@app.post("/translate/")
-def translate_text(translation_request: dict):
-    source_text = translation_request["text"]
-    source_lang = translation_request["source_lang"]
+@app.post("/translate/") 
+def translate_text(translation_request: dict): 
+    source_text = translation_request["text"] 
+    source_lang = translation_request["source_lang"] 
     target_lang = translation_request["target_lang"]
 
-    # Получение токенов и конвертация входного текста
-    input_ids = tokenizer.encode(source_text, return_tensors="pt")
-    translated_text = model.generate(input_ids=input_ids, decoder_start_token_id=model.config.pad_token_id)
+# Получение токенов и конвертация входного текста 
+input_ids = tokenizer.encode(source_text, return_tensors="pt") 
+translated_text = model.generate(input_ids=input_ids, decoder_start_token_id=model.config.pad_token_id)
 
-    # Осуществление обратной конвертации и декодирование выходного текста
-    translated_text = tokenizer.decode(translated_text[0], skip_special_tokens=True)
+# Осуществление обратной конвертации и декодирование выходного текста 
+translated_text = tokenizer.decode(translated_text[0], skip_special_tokens=True)
 
-    return {"translated_text": translated_text}
+return {"translated_text": translated_text}
 
-
-@app.post("/translate/english-to-russian")
-def translate_english_to_russian(translation_request: dict):
-    translation_request["source_lang"] = "en"
-    translation_request["target_lang"] = "ru"
+@app.post("/translate/english-to-russian") 
+def translate_english_to_russian(translation_request: dict): 
+    translation_request["source_lang"] = "en" 
+    translation_request["target_lang"] = "ru" 
     return translate_text(translation_request)
 
-
-@app.post("/translate/russian-to-english")
-def translate_russian_to_english(translation_request: dict):
-    translation_request["source_lang"] = "ru"
-    translation_request["target_lang"] = "en"
+@app.post("/translate/russian-to-english") 
+def translate_russian_to_english(translation_request: dict): 
+    translation_request["source_lang"] = "ru" 
+    translation_request["target_lang"] = "en" 
     return translate_text(translation_request)
 
-
-if __name__ == "__main__":
-    import uvicorn
-
+if name == "main": import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
 
 
 
