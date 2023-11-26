@@ -16,7 +16,7 @@ def root():
     
 @app.post("/predict/")
 def predict(item: Item):
-    return tokenizer(item.text )[0]"""
+    return tokenizer(item.text )[0]
 
 """import streamlit as st
 #импортируем библиотеку streamlit, чтобы запустить код в приложении
