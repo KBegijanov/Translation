@@ -5,3 +5,4 @@ pydantic[BaseModel]
 transformers[sentencepiece]
 transformers[torch]
 sacremoses
+TensorFlow
