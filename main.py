@@ -12,6 +12,11 @@ tokenizer_ru_en = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-ru-en")
 model_en_ru = AutoModelWithLMHead.from_pretrained("Helsinki-NLP/opus-mt-en-ru") 
 tokenizer_en_ru = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-en-ru")
 
+#добавляем на стартовую страницу запись
+@app.get("/")
+def root():
+    return {"message": "Hello! It's the translator."}
+
 def translate_text(text, model, tokenizer): 
     input_ids = tokenizer.encode(text, return_tensors="pt") 
     output_ids = model.generate(input_ids, max_length=128, num_beams=4, early_stopping=True) 
