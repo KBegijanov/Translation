@@ -23,7 +23,7 @@ def translate_text(text, model, tokenizer):
     translated_text = tokenizer.decode(output_ids[0], skip_special_tokens=True) 
     return translated_text
 
-@app.post("/translate") 
+@app.post("/translate/") 
 def translate(request: TranslationRequest): 
     input_text = request.input_text 
     # Определяем язык текста 
